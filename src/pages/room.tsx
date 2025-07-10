@@ -5,7 +5,7 @@ import { QuestionForm } from '@/components/question-form'
 import { Button } from '@/components/ui/button'
 import { QuestionList } from '@/components/question-list'
 
-type RoomParams = {
+export type RoomParams = {
   roomId: string
 }
 

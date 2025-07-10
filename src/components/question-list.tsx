@@ -1,9 +1,6 @@
 import { useRoomQuestions } from '@/http/use-room-questions'
 import { QuestionItem } from './question-item'
-
-interface QuestionListProps {
-  roomId: string
-}
+import type { QuestionListProps } from './interface'
 
 export function QuestionList(props: QuestionListProps) {
   const { data } = useRoomQuestions(props.roomId)

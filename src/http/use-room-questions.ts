@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import type { GetRoomQuestionsResponse } from './types/get-room-questions-response'
+import type { GetRoomQuestionsResp } from './types'
 
 export function useRoomQuestions(roomId: string) {
   return useQuery({
@@ -8,7 +8,7 @@ export function useRoomQuestions(roomId: string) {
       const response = await fetch(
         `http://localhost:3000/rooms/${roomId}/questions`
       )
-      const result: GetRoomQuestionsResponse = await response.json()
+      const result: GetRoomQuestionsResp = await response.json()
 
       return result
     },

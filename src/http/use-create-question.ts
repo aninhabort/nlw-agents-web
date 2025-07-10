@@ -1,13 +1,11 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import type { CreateQuestionRequest } from './types/create-question-request'
-import type { CreateQuestionResponse } from './types/create-question-response'
-import type { GetRoomQuestionsResponse } from './types/get-room-questions-response'
+import type { CreateQuestionReq, CreateQuestionResp, GetRoomQuestionsResp } from './types'
 
 export function useCreateQuestion(roomId: string) {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: async (data: CreateQuestionRequest) => {
+    mutationFn: async (data: CreateQuestionReq) => {
       const response = await fetch(
         `http://localhost:3000/rooms/${roomId}/questions`,
         {
@@ -19,13 +17,13 @@ export function useCreateQuestion(roomId: string) {
         }
       )
 
-      const result: CreateQuestionResponse = await response.json()
+      const result: CreateQuestionResp = await response.json()
 
       return result
     },
 
     onMutate({ question }) {
-      const questions = queryClient.getQueryData<GetRoomQuestionsResponse>([
+      const questions = queryClient.getQueryData<GetRoomQuestionsResp>([
         'get-questions',
         roomId,
       ])
@@ -40,7 +38,7 @@ export function useCreateQuestion(roomId: string) {
         isGeneratingAnswer: true,
       }
 
-      queryClient.setQueryData<GetRoomQuestionsResponse>(
+      queryClient.setQueryData<GetRoomQuestionsResp>(
         ['get-questions', roomId],
         [newQuestion, ...questionsArray]
       )
@@ -49,7 +47,7 @@ export function useCreateQuestion(roomId: string) {
     },
 
     onSuccess(data, _variables, context) {
-      queryClient.setQueryData<GetRoomQuestionsResponse>(
+      queryClient.setQueryData<GetRoomQuestionsResp>(
         ['get-questions', roomId],
         (questions) => {
           if (!questions) {
@@ -78,7 +76,7 @@ export function useCreateQuestion(roomId: string) {
 
     onError(_error, _variables, context) {
       if (context?.questions) {
-        queryClient.setQueryData<GetRoomQuestionsResponse>(
+        queryClient.setQueryData<GetRoomQuestionsResp>(
           ['get-questions', roomId],
           context.questions
         )
